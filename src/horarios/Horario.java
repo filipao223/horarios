@@ -5,10 +5,9 @@ import java.util.ArrayList;
 
 public class Horario {
     ArrayList<Dia> diasSemana = new ArrayList<>();
-    ArrayList<Integer> ids = new ArrayList<>();
-    int numero;
+    int numero, check=0;
 
-    public Horario(int num, ArrayList<Aula> listaAulas){
+    public Horario(int num, ArrayList<Aula> listaAulas, Aula aula, ArrayList<Aula> jaUsado) throws Excepcao{
         this.numero = num;
         diasSemana.add(new Dia("segunda"));
         diasSemana.add(new Dia("terca"));
@@ -16,8 +15,11 @@ public class Horario {
         diasSemana.add(new Dia("quinta"));
         diasSemana.add(new Dia("sexta"));
         for(Dia dia:diasSemana){
-            if(!dia.addAulas(listaAulas, ids, this)) throw new IllegalArgumentException("INVALID");
+            System.out.println("A criar dia " + dia.dia);
+            if(!dia.addAulas(aula, listaAulas, jaUsado)) check =1;
+            System.out.println("Adicionou dia: " + dia.dia + " " + dia.toString());
         }
+        if(check==1) throw new Excepcao("Fim");
     }
 
     @Override

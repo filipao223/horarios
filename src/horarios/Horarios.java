@@ -2,6 +2,7 @@ package horarios;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Horarios {
     ArrayList<Horario> horarios = new ArrayList<>();
@@ -65,20 +66,31 @@ public class Horarios {
         horariosMain.listaAulas.add(new Aula(12, 13, "Maria Marcelino", "SCC", "TP1", "quinta", 40));
 
         //Cria os horarios
-        int i=1;
-        while(true){
+        int i=0;
+        ArrayList<Aula> temp = new ArrayList<>(horariosMain.listaAulas);
+        for(Aula aula:temp){
+            if(verificaPratica(aula)) continue;
+            ArrayList<Aula> jaUsado = new ArrayList<>();
             try {
-                horariosMain.horarios.add(new Horario(i, horariosMain.listaAulas));
-            } catch (IllegalArgumentException e){
-                break;
+                horariosMain.horarios.add(new Horario(i++, horariosMain.listaAulas, aula, jaUsado));
+            } catch (Excepcao excepcao) {
+                horariosMain.listaAulas.remove(aula);
+                if(horariosMain.listaAulas.isEmpty()) break;
             }
-
-            i++;
         }
 
         System.out.println(i + " horarios encontrados!");
         for(Horario horario: horariosMain.horarios){
             System.out.println(horario);
         }
+    }
+
+    static boolean comparaHorarios(Horario h1, Horario h2){
+        return Objects.equals(h1, h2);
+    }
+
+    static boolean verificaPratica(Aula aula){
+        if(Objects.equals(aula.turma, "T1") || Objects.equals(aula.turma, "TP1")) return true;
+        else return false;
     }
 }
